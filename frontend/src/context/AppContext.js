@@ -1,26 +1,45 @@
+// AppContext.js
 "use client";
 import React, { createContext, useState, useContext } from "react";
 
 const AppContext = createContext();
 
 export function AppContextProvider({ children }) {
-  const [userData, setUserData] = useState({
-    name: "",
-    personality: {
-        summary: "",
-        energyStyle: "",
-        cognitiveStyle: "",
-        valuesStyle: "",
-        lifeStyle: "",
-    },
-    twitter: "",
-    instagram: "",
-    linkedin: "",
-    facebook: "",
-    hobbies: "",
-    job: "",
-    interests: "",
-  });
+    const [userData, setUserData] = useState({
+        name: "Ada Lovelace",
+        personality: {
+          summary: "Visionary and analytical, combining creativity with logic to pioneer new ideas.",
+          energyStyle: "Introverted",
+          cognitiveStyle: "Intuitive",
+          valuesStyle: "Thinking",
+          lifeStyle: "Judging"
+        },
+        twitter: "Shares insights about mathematics, technology, and the future of computation.",
+        instagram: "Posts elegant hand-written notes and diagrams of algorithms.",
+        linkedin: "Discusses the importance of innovation and women in technology.",
+        facebook: "Engages with stories about advancements in programming and historical figures in science.",
+        hobbies: "Writing algorithms, reading literature, solving puzzles.",
+        job: "Mathematician and first computer programmer.",
+        interests: "Programming, mathematics, innovation, women's empowerment in STEM."
+      });
+      
+//   const [userData, setUserData] = useState({
+//     name: "",
+//     personality: {
+//         summary: "",
+//         energyStyle: "",
+//         cognitiveStyle: "",
+//         valuesStyle: "",
+//         lifeStyle: "",
+//     },
+//     twitter: "",
+//     instagram: "",
+//     linkedin: "",
+//     facebook: "",
+//     hobbies: "",
+//     job: "",
+//     interests: "",
+//   });
 
   const [bots, setBots] = useState([
     {
