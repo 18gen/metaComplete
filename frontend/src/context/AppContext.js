@@ -4,6 +4,24 @@ import React, { createContext, useState, useContext } from "react";
 const AppContext = createContext();
 
 export function AppContextProvider({ children }) {
+  const [userData, setUserData] = useState({
+    name: "",
+    personality: {
+        summary: "",
+        energyStyle: "",
+        cognitiveStyle: "",
+        valuesStyle: "",
+        lifeStyle: "",
+    },
+    twitter: "",
+    instagram: "",
+    linkedin: "",
+    facebook: "",
+    hobbies: "",
+    job: "",
+    interests: "",
+  });
+
   const [bots, setBots] = useState([
     {
       name: "Marie Curie",
@@ -155,6 +173,8 @@ export function AppContextProvider({ children }) {
   const [chatData, setChatData] = useState([[], [], [], [], [], [], [], []]);
 
   const value = {
+    userData,
+    setUserData,
     bots,
     setBots,
     chatData,
