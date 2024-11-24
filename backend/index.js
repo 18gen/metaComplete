@@ -1,12 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import queryOllama from './llama.js'; // Import the query function
+import cors from 'cors';
 
 const app = express();
 const port = 3000;
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
+app.use(cors());
 
 console.log(`HTTP REST API server running on http://0.0.0.0:${port}`);
 
