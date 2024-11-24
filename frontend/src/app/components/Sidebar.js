@@ -20,7 +20,7 @@ const Sidebar = () => {
     { label: 'Messages', icon: MessagesIcon, path: '/chat' },
     { label: 'Notifications', icon: NotificationsIcon, path: '/notifications' },
     { label: 'Create', icon: CreateIcon, path: '/create' },
-    { label: 'Profile', path: '/insta', isImage: true },
+    { label: 'Profile', path: '/profile', isImage: true },
   ];
 
   const bottomLinks = [
