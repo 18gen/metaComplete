@@ -7,7 +7,7 @@ import { genFullConvo } from '../../utils/genConvos';
 import styles from './ChatWindow.module.css';
 import { FaSyncAlt } from 'react-icons/fa'; // Import the refresh icon
 
-const ChatWindow = ({ selectedContactId, onSendMessage }) => {
+const ChatWindow = ({ selectedContactId, onSendMessage, isLoading }) => {
   const {
     bots,
     chatData,
@@ -127,7 +127,7 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
         })}
 
         {/* Typing Bubble */}
-        {loading && (
+        {isLoading && (
           <div
             className={`${styles.typingBubble} ${
               isUserTurn ? styles.typingBubbleRight : styles.typingBubbleLeft
