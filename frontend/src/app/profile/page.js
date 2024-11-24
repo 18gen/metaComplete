@@ -56,6 +56,12 @@ const ProfilePage = () => {
   };
 
   const socialPlatforms = ["twitter", "instagram", "linkedin", "facebook"];
+  const personalityOptions = {
+    energyStyle: ["Introverted", "Extraverted"],
+    cognitiveStyle: ["Intuitive", "Sensor"],
+    valuesStyle: ["Thinker", "Feeler"],
+    lifeStyle: ["Judger", "Perceiver"],
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -117,23 +123,55 @@ const ProfilePage = () => {
         {/* Personality Section */}
         <div className="bg-white shadow-md rounded-md p-6">
           <h2 className="text-xl font-bold mt-1 mb-4">Personality</h2>
-          {Object.keys(userData.personality).map((key) => (
-            <div key={key} className="mb-4">
-              <label
-                htmlFor={key}
-                className="block pl-1 text-gray-700 font-medium mb-1 capitalize"
-              >
-                {key.replace(/([A-Z])/g, " $1")}
-              </label>
-              <input
-                type="text"
-                id={key}
-                name={key}
-                value={userData.personality[key]}
-                onChange={handlePersonalityChange}
-                placeholder={`Enter your ${key}`}
-                className="w-full border-gray-300 border rounded-md p-2 focus:outline-black"
-              />
+
+          {/* Summary Input */}
+          <div className="mb-6">
+            <label
+              htmlFor="summary"
+              className="block text-gray-700 font-medium mb-2"
+            >
+              Summary
+            </label>
+            <input
+              type="text"
+              id="summary"
+              name="summary"
+              value={userData.personality.summary}
+              onChange={handlePersonalityChange}
+              placeholder="Enter your summary"
+              className="w-full border-gray-300 border rounded-md p-2 focus:outline-black"
+            />
+          </div>
+
+          {/* Radio Button Groups */}
+          {Object.keys(personalityOptions).map((key) => (
+            <div key={key} className="flex items-center mb-4">
+              {/* Style Label */}
+              <div className="w-40">
+                <label
+                  htmlFor={key}
+                  className="block text-gray-700 font-medium capitalize"
+                >
+                  {key.replace(/([A-Z])/g, " $1")}
+                </label>
+              </div>
+
+              {/* Radio Buttons */}
+              <div className="flex space-x-4">
+                {personalityOptions[key].map((option) => (
+                  <label key={option} className="flex items-center">
+                    <input
+                      type="radio"
+                      name={key}
+                      value={option}
+                      checked={userData.personality[key] === option}
+                      onChange={handlePersonalityChange}
+                      className="form-radio h-4 w-4 text-blue-600"
+                    />
+                    <span className="ml-2 text-gray-700">{option}</span>
+                  </label>
+                ))}
+              </div>
             </div>
           ))}
 
