@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppContext } from '../../context/AppContext';
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAppContext } from "../../context/AppContext";
 
 const ChatSidebar = ({ contacts, onContactSelect, selectedContactId }) => {
-  const { bots, chatData, read, setRead, compatibilityScores } = useAppContext();
+  const { bots, chatData, read, setRead, compatibilityScores } =
+    useAppContext();
   const [sortedContacts, setSortedContacts] = useState(contacts);
 
   // Helper to extract the latest message summary
   const getLastMessageSummary = (botId) => {
     const messages = chatData[botId] || [];
-    if (messages.length === 0) return ''; // No messages for this bot
+    if (messages.length === 0) return ""; // No messages for this bot
     const [text, sender] = messages[messages.length - 1];
-    const senderName = sender === 'user' ? 'You:' : ''; // Map sender role
-    return `${senderName} ${text.substring(0, 30)}${text.length > 30 ? '...' : ''}`; // Truncate message
+    const senderName = sender === "user" ? "You:" : ""; // Map sender role
+    return `${senderName} ${text.substring(0, 30)}${
+      text.length > 30 ? "..." : ""
+    }`; // Truncate message
   };
 
   // Determine if a contact has unread messages
@@ -88,7 +91,7 @@ const ChatSidebar = ({ contacts, onContactSelect, selectedContactId }) => {
                 key={botId}
                 onClick={() => handleContactClick(botId)}
                 className={`flex flex-col items-start p-4 cursor-pointer ${
-                  selectedContactId === botId ? 'bg-blue-100' : ''
+                  selectedContactId === botId ? "bg-blue-100" : ""
                 } hover:bg-blue-50`}
                 initial={{ opacity: 0, x: -50 }}
                 animate={{
@@ -96,7 +99,7 @@ const ChatSidebar = ({ contacts, onContactSelect, selectedContactId }) => {
                   x: selectedContactId === botId ? 10 : 0,
                 }}
                 exit={{ opacity: 0, x: -50 }}
-                transition={{ type: 'spring', stiffness: 150, damping: 20 }}
+                transition={{ type: "spring", stiffness: 150, damping: 20 }}
                 layout // Automatically animates layout changes
               >
                 <div className="flex items-center w-full">
@@ -106,17 +109,18 @@ const ChatSidebar = ({ contacts, onContactSelect, selectedContactId }) => {
                     className="w-14 h-14 rounded-full mr-4 object-cover"
                     animate={
                       selectedContactId === botId
-                        ? { scale: 1.2, boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }
-                        : { scale: 1, boxShadow: 'none' }
+                        ? {
+                            scale: 1.2,
+                            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                          }
+                        : { scale: 1, boxShadow: "none" }
                     }
-                    transition={{ type: 'spring', stiffness: 200 }}
+                    transition={{ type: "spring", stiffness: 200 }}
                   />
                   <div className="flex-grow">
                     {/* Contact Name */}
                     <div
-                      className={`${
-                        isUnread(botId) ? 'font-bold' : ''
-                      }`} // Bold if unread
+                      className={`${isUnread(botId) ? "font-bold" : ""}`} // Bold if unread
                     >
                       {contact.name}
                     </div>
@@ -124,7 +128,9 @@ const ChatSidebar = ({ contacts, onContactSelect, selectedContactId }) => {
                     {/* Message Preview */}
                     <div
                       className={`text-sm ${
-                        isUnread(botId) ? 'font-bold text-gray-900' : 'text-gray-600'
+                        isUnread(botId)
+                          ? "font-bold text-gray-900"
+                          : "text-gray-600"
                       }`} // Bold if unread
                     >
                       {getLastMessageSummary(botId)}
@@ -134,16 +140,19 @@ const ChatSidebar = ({ contacts, onContactSelect, selectedContactId }) => {
                   {/* Status/Score Indicator */}
                   <motion.div
                     className={`ml-2 flex items-center justify-center ${
-                      isBottomScore ? 'text-yellow-400' : 'text-green-500'
+                      isBottomScore ? "text-yellow-400" : "text-green-500"
                     }`}
+                    style={{
+                      width: "2rem", // Fixed width
+                      height: "2rem", // Fixed height
+                    }}
                     animate={{
-                      scale: compatibilityScore !== 0 ? 1 : 0.8,
+                      scale: selectedContactId === botId ? 1.2 : 1, // Scale up if selected
                       opacity: 1,
                     }}
                     transition={{
-                      repeat: compatibilityScore === 0 && hasReachedMessageLimit ? Infinity : 0,
-                      repeatType: 'mirror',
-                      duration: 1,
+                      type: "spring",
+                      stiffness: 200,
                     }}
                   >
                     {compatibilityScore !== 0 ? (
@@ -151,7 +160,7 @@ const ChatSidebar = ({ contacts, onContactSelect, selectedContactId }) => {
                         className="text-lg font-bold"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 200 }}
+                        transition={{ type: "spring", stiffness: 200 }}
                       >
                         {compatibilityScore}
                       </motion.div>
@@ -160,14 +169,14 @@ const ChatSidebar = ({ contacts, onContactSelect, selectedContactId }) => {
                         className="w-4 h-4 bg-green-500 rounded-full"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 200 }}
+                        transition={{ type: "spring", stiffness: 200 }}
                       />
                     ) : (
                       <motion.div
                         className="w-4 h-4 bg-yellow-400 rounded-full animate-pulse"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 200 }}
+                        transition={{ type: "spring", stiffness: 200 }}
                       />
                     )}
                   </motion.div>
