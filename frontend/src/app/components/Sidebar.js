@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { instagram } from "../../../public/instagramPage";
 const Sidebar = () => {
+  const router = useRouter();
+
   const topLinks = [
     "Home", "Search", "Explore", "Reels", "Messages", "Notifications",
     "Create", "Profile"
@@ -24,11 +26,12 @@ const Sidebar = () => {
             ))}
         </nav>
 
+      {/* Bottom Navigation Links */}
       <nav className="flex flex-col mt-auto">
         {bottomLinks.map((link, index) => (
           <a
             key={index}
-            className="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 p-2 rounded-md"
+            className="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 p-2 rounded-md cursor-pointer"
           >
             <span>{link}</span>
           </a>
