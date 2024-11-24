@@ -19,7 +19,7 @@ async function queryOllama(personOne, personTwo, messageHistory) {
         console.log(messageHistory.length);
         if (messageHistory.length !== 0) {
             console.log("Business as usual");
-            currentUser = messageHistory[messageHistory.length - 1].role;
+            currentUser = messageHistory[messageHistory.length - 1].role == personOne.name ? personTwo.name : personOne.name;
             state = "Continue the conversation";
         }
         const updatedMessageHistory = replaceRoles(messageHistory);
