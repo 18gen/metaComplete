@@ -1,5 +1,5 @@
 import axios from 'axios';
-import analyzeConversationTone from './helper.js';
+import { analyzeConversationTone}  from './helper.js';
 import dotenv from 'dotenv';
 dotenv.config(); // Load environment variables from .env
 const nebiusUrl = process.env.NEBIUS_URL;
