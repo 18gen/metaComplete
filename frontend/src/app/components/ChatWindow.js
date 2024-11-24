@@ -5,8 +5,9 @@ import InputBar from './InputBar';
 import { useAppContext } from '../../context/AppContext';
 import { genFullConvo } from '../../utils/genConvos';
 import styles from './ChatWindow.module.css';
+import { FaSyncAlt } from 'react-icons/fa'; // Import the refresh icon
 
-const ChatWindow = ({ selectedContactId, onSendMessage }) => {
+const ChatWindow = ({ selectedContactId, onSendMessage, isLoading }) => {
   const {
     bots,
     chatData,
@@ -24,7 +25,10 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
   const [showSuggestions, setShowSuggestions] = useState(true); // Visibility state for suggestion section
 
   // Retrieve messages for the selected bot
-  const messages = selectedContactId !== null && chatData[selectedContactId] ? chatData[selectedContactId] : [];
+  const messages =
+    selectedContactId !== null && chatData[selectedContactId]
+      ? chatData[selectedContactId]
+      : [];
 
   // Determine the turn based on the length of the messages array
   const isUserTurn = messages.length % 2 === 1;
@@ -123,13 +127,17 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
         })}
 
         {/* Typing Bubble */}
-        {loading && (
+        {isLoading && (
           <div
             className={`${styles.typingBubble} ${
               isUserTurn ? styles.typingBubbleRight : styles.typingBubbleLeft
             }`}
           >
-            <div className={`${styles.bubble} ${isUserTurn ? styles.bubbleRight : styles.bubbleLeft}`}>
+            <div
+              className={`${styles.bubble} ${
+                isUserTurn ? styles.bubbleRight : styles.bubbleLeft
+              }`}
+            >
               <span></span>
               <span></span>
               <span></span>
@@ -145,14 +153,23 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
       {showSuggestions && suggestion && (
         <div className="p-4 bg-gray-50 border-t">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="text-lg font-semibold">Suggestions</h3>
-            <button
-              onClick={fetchSuggestion}
-              disabled={refreshing}
-              className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition disabled:bg-gray-300"
-            >
-              {refreshing ? 'Refreshing...' : 'Refresh'}
-            </button>
+            <h3 className="text-lg font-semibold flex items-center">
+              Suggestions
+              {/* Refresh Button Next to the Title */}
+              <button
+                onClick={fetchSuggestion}
+                disabled={refreshing}
+                className="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors duration-100 ease-linear"
+                aria-label="Refresh Suggestions"
+                title="Refresh Suggestions" // Tooltip on hover
+              >
+                {refreshing ? (
+                  <FaSyncAlt className="animate-spin" />
+                ) : (
+                  <FaSyncAlt />
+                )}
+              </button>
+            </h3>
           </div>
           <button
             className="w-full text-left px-4 py-2 bg-white border rounded shadow hover:bg-blue-50 transition"
