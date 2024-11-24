@@ -1,5 +1,5 @@
 "use client";
-import Sidebar from "./components/instagram/Sidebar";
+import Sidebar from "./components/Sidebar";
 
 export default function Home() {
   return (
