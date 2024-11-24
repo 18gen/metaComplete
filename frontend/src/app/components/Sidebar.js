@@ -1,5 +1,7 @@
 import Image from "next/image";
-import { instagram } from "../../../public/instagramPage";
+import { instagram } from "../../../public/instagram.png";
+import { useRouter } from "next/router";
+
 const Sidebar = () => {
   const router = useRouter();
 
