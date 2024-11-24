@@ -30,8 +30,12 @@ async function queryOllama(personOne, personTwo, messageHistory) {
                     "content": systemPrompt
                 },
             ];
+        if (messageHistory.length == 0) {
+            messages.push({"role": "user", "content": "hi"});
+        }
         messages.push(...updatedMessageHistory);
         console.log(systemPrompt);
+        console.log(messages);
 
         const url = `${nebiusUrl}/api/chat`; // Local chat endpoint for Ollama
 
