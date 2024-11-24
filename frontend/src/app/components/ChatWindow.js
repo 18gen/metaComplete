@@ -1,14 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import ChatMessage from './ChatMessage';
 import InputBar from './InputBar';
 import { useAppContext } from '../../context/AppContext';
-import { genFullConvo } from '../../utils/genConvos';
 import styles from './ChatWindow.module.css';
 
-const ChatWindow = ({ selectedContactId, onSendMessage }) => {
-  const { bots, chatData, setChatData, userData, compatibilityScores, setCompatibilityScores, read, setRead  } = useAppContext(); // Access bots, chat data, and user data from context
-  const [loading, setLoading] = useState(false); // Loading state
+const ChatWindow = ({ selectedContactId, onSendMessage, isLoading }) => { // Accept isLoading as a prop
+  const { bots, chatData } = useAppContext(); // Access bots and chat data from context
 
   // Retrieve messages for the selected bot
   const messages = selectedContactId !== null && chatData[selectedContactId] ? chatData[selectedContactId] : [];
@@ -16,43 +14,8 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
   // Determine the turn based on the length of the messages array
   const isUserTurn = messages.length % 2 === 1;
 
-  const handleConversation = async () => {
-    setLoading(true);
-    try {
-      await genFullConvo(
-        selectedContactId,
-        bots[selectedContactId],
-        chatData[selectedContactId],
-        setChatData,
-        userData,
-        setCompatibilityScores, // Pass setCompatibilityScores
-        compatibilityScores // Pass compatibilityScores
-      );
-    } catch (error) {
-      console.error('Error generating conversation:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="w-2/3 flex flex-col h-full">
-      {/* <button
-        onClick={handleConversation}
-        style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          backgroundColor: '#007BFF',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-        }}
-        disabled={loading}
-      >
-        Talk
-      </button> */}
-
       {/* Messages Section */}
       <div className="flex-grow overflow-y-auto p-4 bg-white">
         {messages.map(([text, sender], index) => {
@@ -80,7 +43,7 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
         })}
 
         {/* Typing Bubble */}
-        {loading && (
+        {isLoading && ( // Use the isLoading prop instead of local state
           <div
             className={`${styles.typingBubble} ${
               isUserTurn ? styles.typingBubbleRight : styles.typingBubbleLeft

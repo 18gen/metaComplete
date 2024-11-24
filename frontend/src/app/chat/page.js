@@ -71,6 +71,7 @@ const Home = () => {
         <ChatWindow
           selectedContactId={selectedContactId} // Pass the selected contact ID
           onSendMessage={handleSendMessage}
+          isLoading={loading}
         />
       ) : (
         <div className="w-2/3 flex items-center justify-center bg-gray-100">
