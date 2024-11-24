@@ -4,59 +4,45 @@ import React, { createContext, useState, useContext } from "react";
 const AppContext = createContext();
 
 export function AppContextProvider({ children }) {
-    const [userData, setUserData] = useState({
-        name: "Ada Lovelace",
-        profilePicture: "ada_lovelace.png", // Added profile picture
-        personality: {
-          summary: "Visionary and analytical, combining creativity with logic to pioneer new ideas.",
-          energyStyle: "Introverted",
-          cognitiveStyle: "Intuitive",
-          valuesStyle: "Thinking",
-          lifeStyle: "Judging"
-        },
-        twitter: "Shares insights about mathematics, technology, and the future of computation.",
-        instagram: "Posts elegant hand-written notes and diagrams of algorithms.",
-        linkedin: "Discusses the importance of innovation and women in technology.",
-        facebook: "Engages with stories about advancements in programming and historical figures in science.",
-        hobbies: "Writing algorithms, reading literature, solving puzzles.",
-        job: "Mathematician and first computer programmer.",
-        interests: "Programming, mathematics, innovation, women's empowerment in STEM."
-      });
-      
-    // The commented-out userData remains untouched
-    // const [userData, setUserData] = useState({
-    //     name: "",
-    //     profilePicture: "",
-    //     personality: {
-    //         summary: "",
-    //         energyStyle: "",
-    //         cognitiveStyle: "",
-    //         valuesStyle: "",
-    //         lifeStyle: "",
-    //     },
-    //     twitter: "",
-    //     instagram: "",
-    //     linkedin: "",
-    //     facebook: "",
-    //     hobbies: "",
-    //     job: "",
-    //     interests: "",
-    // });
+  const [userData, setUserData] = useState({
+    name: "Ada Lovelace",
+    profilePicture: "ada_lovelace.png",
+    personality: {
+      summary:
+        "Visionary and analytical, combining creativity with logic to pioneer new ideas.",
+      energyStyle: "Introvert",
+      cognitiveStyle: "Intuitive",
+      valuesStyle: "Thinkers",
+      lifeStyle: "Judgers",
+    },
+    twitter:
+      "Shares insights about mathematics, technology, and the future of computation.",
+    instagram: "Posts elegant hand-written notes and diagrams of algorithms.",
+    linkedin: "Discusses the importance of innovation and women in technology.",
+    facebook:
+      "Engages with stories about advancements in programming and historical figures in science.",
+    hobbies: "Writing algorithms, reading literature, solving puzzles.",
+    job: "Mathematician and first computer programmer.",
+    interests:
+      "Programming, mathematics, innovation, women's empowerment in STEM.",
+  });
 
   const [bots, setBots] = useState([
     {
       name: "Marie Curie",
-      profilePicture: "marie_curie.png", // Added profile picture
+      profilePicture: "marie_curie.png",
       personality: {
         summary: "Empathetic visionary focused on scientific discoveries.",
-        energyStyle: "Introverted",
+        energyStyle: "Introvert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Feeling",
-        lifeStyle: "Judging",
+        valuesStyle: "Feelers",
+        lifeStyle: "Judgers",
       },
       twitter: "Shares scientific discoveries and inspirational quotes.",
-      instagram: "Posts about lab experiments and achievements of women in science.",
-      linkedin: "Professional updates about advancements in chemistry and physics.",
+      instagram:
+        "Posts about lab experiments and achievements of women in science.",
+      linkedin:
+        "Professional updates about advancements in chemistry and physics.",
       facebook: "Engages in discussions about the importance of education.",
       hobbies: "Reading, lab experiments, hiking.",
       job: "Nobel Prize-winning physicist and chemist.",
@@ -64,17 +50,18 @@ export function AppContextProvider({ children }) {
     },
     {
       name: "Albert Einstein",
-      profilePicture: "albert_einstein.png", // Added profile picture
+      profilePicture: "albert_einstein.png",
       personality: {
         summary: "Curious innovator who loves tackling theoretical challenges.",
-        energyStyle: "Introverted",
+        energyStyle: "Introvert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Thinking",
-        lifeStyle: "Perceiving",
+        valuesStyle: "Thinkers",
+        lifeStyle: "Perceivers",
       },
       twitter: "Shares thought-provoking insights and quirky jokes.",
       instagram: "Posts picturesque photos of his blackboard equations.",
-      linkedin: "Discusses theoretical physics and the importance of curiosity.",
+      linkedin:
+        "Discusses theoretical physics and the importance of curiosity.",
       facebook: "Shares historical anecdotes and reflections on science.",
       hobbies: "Violin playing, sailing, philosophizing.",
       job: "Theoretical physicist.",
@@ -82,16 +69,18 @@ export function AppContextProvider({ children }) {
     },
     {
       name: "Oprah Winfrey",
-      profilePicture: "oprah_winfrey.png", // Added profile picture
+      profilePicture: "oprah_winfrey.png",
       personality: {
-        summary: "Charismatic motivator who inspires self-growth and empowerment.",
-        energyStyle: "Extraverted",
+        summary:
+          "Charismatic motivator who inspires self-growth and empowerment.",
+        energyStyle: "Extravert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Feeling",
-        lifeStyle: "Judging",
+        valuesStyle: "Feelers",
+        lifeStyle: "Judgers",
       },
       twitter: "Encourages self-care and shares motivational content.",
-      instagram: "Highlights personal growth journeys and philanthropic efforts.",
+      instagram:
+        "Highlights personal growth journeys and philanthropic efforts.",
       linkedin: "Promotes leadership and diversity in business.",
       facebook: "Engages with community-building conversations.",
       hobbies: "Book clubs, cooking, yoga.",
@@ -100,13 +89,13 @@ export function AppContextProvider({ children }) {
     },
     {
       name: "Leonardo da Vinci",
-      profilePicture: "leonardo_da_vinci.png", // Added profile picture
+      profilePicture: "leonardo_da_vinci.png",
       personality: {
         summary: "Strategic planner with a passion for art and invention.",
-        energyStyle: "Introverted",
+        energyStyle: "Introvert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Thinking",
-        lifeStyle: "Judging",
+        valuesStyle: "Thinkers",
+        lifeStyle: "Judgers",
       },
       twitter: "Shares sketches and fascinating inventions.",
       instagram: "Curates a blend of art and anatomy studies.",
@@ -118,13 +107,14 @@ export function AppContextProvider({ children }) {
     },
     {
       name: "Serena Williams",
-      profilePicture: "serena_williams.png", // Added profile picture
+      profilePicture: "serena_williams.png",
       personality: {
-        summary: "Confident leader who values structure and discipline in sports.",
-        energyStyle: "Extraverted",
-        cognitiveStyle: "Sensing",
-        valuesStyle: "Thinking",
-        lifeStyle: "Judging",
+        summary:
+          "Confident leader who values structure and discipline in sports.",
+        energyStyle: "Extravert",
+        cognitiveStyle: "Sensors",
+        valuesStyle: "Thinkers",
+        lifeStyle: "Judgers",
       },
       twitter: "Motivates fans with fitness tips and career highlights.",
       instagram: "Posts tennis training routines and family moments.",
@@ -136,17 +126,18 @@ export function AppContextProvider({ children }) {
     },
     {
       name: "Stephen Hawking",
-      profilePicture: "stephen_hawking.png", // Added profile picture
+      profilePicture: "stephen_hawking.png",
       personality: {
         summary: "Visionary problem solver passionate about cosmology.",
-        energyStyle: "Introverted",
+        energyStyle: "Introvert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Thinking",
-        lifeStyle: "Perceiving",
+        valuesStyle: "Thinkers",
+        lifeStyle: "Perceivers",
       },
       twitter: "Explains complex physics topics with simplicity and humor.",
       instagram: "Shares stunning visuals of space and the universe.",
-      linkedin: "Encourages discussions on cosmology and accessibility in science.",
+      linkedin:
+        "Encourages discussions on cosmology and accessibility in science.",
       facebook: "Hosts Q&A sessions about the cosmos.",
       hobbies: "Lecturing, writing, chess.",
       job: "Theoretical physicist and cosmologist.",
@@ -154,13 +145,14 @@ export function AppContextProvider({ children }) {
     },
     {
       name: "Frida Kahlo",
-      profilePicture: "frida_kahlo.png", // Added profile picture
+      profilePicture: "frida_kahlo.png",
       personality: {
-        summary: "Artistic and sensitive, exploring creativity and self-expression.",
-        energyStyle: "Introverted",
-        cognitiveStyle: "Sensing",
-        valuesStyle: "Feeling",
-        lifeStyle: "Perceiving",
+        summary:
+          "Artistic and sensitive, exploring creativity and self-expression.",
+        energyStyle: "Introvert",
+        cognitiveStyle: "Sensors",
+        valuesStyle: "Feelers",
+        lifeStyle: "Perceivers",
       },
       twitter: "Expresses personal experiences through poetic tweets.",
       instagram: "Features bold artwork and snippets of her colorful life.",
@@ -172,15 +164,16 @@ export function AppContextProvider({ children }) {
     },
     {
       name: "Nikola Tesla",
-      profilePicture: "nikola_tesla.png", // Added profile picture
+      profilePicture: "nikola_tesla.png",
       personality: {
         summary: "Curious innovator driven by futuristic inventions.",
-        energyStyle: "Extraverted",
+        energyStyle: "Extravert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Thinking",
-        lifeStyle: "Perceiving",
+        valuesStyle: "Thinkers",
+        lifeStyle: "Perceivers",
       },
-      twitter: "Shares ideas for futuristic inventions and energy breakthroughs.",
+      twitter:
+        "Shares ideas for futuristic inventions and energy breakthroughs.",
       instagram: "Posts diagrams of his engineering marvels.",
       linkedin: "Focuses on clean energy solutions and innovation.",
       facebook: "Engages in debates about the future of energy.",
@@ -191,16 +184,16 @@ export function AppContextProvider({ children }) {
   ]);
 
   const [chatData, setChatData] = useState([
-    [["Message1", "ai"], ["Message2", "user"], ["Message3", "ai"]], // Array of message arrays
-    [], 
-    [], 
-    [], 
-    [], 
-    [], 
-    [], 
-    []
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
   ]);
-  
+
   const value = {
     userData,
     setUserData,
@@ -213,7 +206,6 @@ export function AppContextProvider({ children }) {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
-// Custom hook for easy access
 export function useAppContext() {
   return useContext(AppContext);
 }

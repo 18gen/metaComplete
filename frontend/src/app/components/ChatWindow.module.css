@@ -1,0 +1,65 @@
+.typingBubble {
+    display: flex;
+    padding: 10px;
+    margin-top: 10px;
+    height: 60px;
+  }
+  
+  .bubbleLeft {
+    background-color: #e0e0e0;
+  }
+  
+  .bubbleRight {
+    background-color: #007BFF;
+  }
+  
+  .typingBubbleLeft {
+    justify-content: flex-start;
+  }
+  
+  .typingBubbleRight {
+    justify-content: flex-end;
+  }
+  
+  .bubble {
+    border-radius: 20px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 60%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bubble span {
+    width: 8px;
+    height: 8px;
+    margin: 0 4px;
+    background-color: currentColor;
+    border-radius: 50%;
+    animation: typing 1.5s infinite ease-in-out;
+  }
+  
+  .bubble span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .bubble span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes typing {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+  }
+  
