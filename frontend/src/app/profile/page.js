@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { userLogo } from "../../../public/instagramPage";
+import userLogo from "../../../public/instagramPage/userLogo.jpg";
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { useAppContext } from "../../context/AppContext"; 
