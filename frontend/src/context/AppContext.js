@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 const AppContext = createContext();
 
@@ -207,6 +207,17 @@ export function AppContextProvider({ children }) {
     [], 
     []
   ]);
+  const [read, setRead] = useState(Array(bots.length).fill(0)); // Initialize read count
+  const [compatibilityScores, setCompatibilityScores] = useState(new Array(8).fill(0));
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedData = localStorage.getItem('userData');
+      if (storedData) {
+        setUserData(JSON.parse(storedData));
+      }
+    }
+  }, []);
 
   const value = {
     userData,
@@ -215,6 +226,10 @@ export function AppContextProvider({ children }) {
     setBots,
     chatData,
     setChatData,
+    read,
+    setRead,
+    compatibilityScores,
+    setCompatibilityScores
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

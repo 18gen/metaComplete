@@ -1,43 +1,65 @@
+// profile/page.js
 'use client';
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { useAppContext } from "../../context/AppContext"; 
 
 const ProfilePage = () => {
   const { userData, setUserData } = useAppContext(); // Access userData and setUserData
-  
+
+  // Local state for the form
+  const [formData, setFormData] = useState(userData);
+
   // State for Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPlatform, setCurrentPlatform] = useState("");
   const [tempLink, setTempLink] = useState("");
 
-  // Handler for general input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevData) => ({
-      ...prevData,
-      [name]: value, // Update the corresponding field in userData
-    }));
-  };
+  // State for Loading and Notification
+  const [isLoading, setIsLoading] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
-  // Handler for personality-related input changes
-  const handlePersonalityChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevData) => ({
-      ...prevData,
-      personality: {
-        ...prevData.personality,
-        [name]: value, // Update the corresponding personality field
-      },
-    }));
+  // Update formData when userData changes (e.g., on initial load)
+  useEffect(() => {
+    setFormData(userData);
+  }, [userData]);
+
+  // Determine if there are changes
+  const hasChanges = JSON.stringify(formData) !== JSON.stringify(userData);
+
+  // Function to save all user data to localStorage and context
+  const saveAllData = async () => {
+    if (!hasChanges) return;
+
+    setIsLoading(true);
+    try {
+      // Simulate a network request
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      localStorage.setItem('userData', JSON.stringify(formData));
+      setUserData(formData);
+      
+      // Show notification
+      setShowNotification(true);
+      
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      alert('Failed to save profile. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Modal control functions
   const openModal = (platform) => {
     setCurrentPlatform(platform);
-    setTempLink(userData[platform] || "");
+    setTempLink(formData[platform] || "");
     setIsModalOpen(true);
   };
 
@@ -48,7 +70,7 @@ const ProfilePage = () => {
   };
 
   const saveLink = () => {
-    setUserData((prevData) => ({
+    setFormData((prevData) => ({
       ...prevData,
       [currentPlatform]: tempLink,
     }));
@@ -86,9 +108,9 @@ const ProfilePage = () => {
             <input
               type="text"
               id="name"
-              name="name"
-              value={userData.name}
-              onChange={handleInputChange}
+              name="name" // Ensure name matches the state property
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="Enter your name"
               className="border-gray-300 text-2xl font-bold rounded-md pl-2 p-1 mb-4 focus:outline-black"
             />
@@ -100,7 +122,7 @@ const ProfilePage = () => {
                   key={platform}
                   onClick={() => openModal(platform)}
                   className={`flex flex-col items-center p-4 border rounded-md 
-                    ${userData[platform] ? "bg-green-100 border-green-500" : "bg-gray-100 border-gray-300"}
+                    ${formData[platform] ? "bg-green-100 border-green-500" : "bg-gray-100 border-gray-300"}
                     hover:bg-gray-200 transition`}
                 >
                   <img
@@ -110,7 +132,7 @@ const ProfilePage = () => {
                   />
                   <span className="capitalize text-sm">
                     {platform}
-                    {userData[platform] && (
+                    {formData[platform] && (
                       <span className="text-green-500 mt-1"> &#10003;</span>
                     )}
                   </span>
@@ -135,9 +157,15 @@ const ProfilePage = () => {
             <input
               type="text"
               id="summary"
-              name="summary"
-              value={userData.personality.summary}
-              onChange={handlePersonalityChange}
+              name="summary" // Matches personality.summary
+              value={formData.personality.summary}
+              onChange={(e) => setFormData({
+                ...formData,
+                personality: {
+                  ...formData.personality,
+                  summary: e.target.value,
+                },
+              })}
               placeholder="Enter your summary"
               className="w-full border-gray-300 border rounded-md p-2 focus:outline-black"
             />
@@ -162,10 +190,16 @@ const ProfilePage = () => {
                   <label key={option} className="flex items-center">
                     <input
                       type="radio"
-                      name={key}
+                      name={key} // Matches personality.[key]
                       value={option}
-                      checked={userData.personality[key] === option}
-                      onChange={handlePersonalityChange}
+                      checked={formData.personality[key] === option}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        personality: {
+                          ...formData.personality,
+                          [key]: e.target.value,
+                        },
+                      })}
                       className="form-radio h-4 w-4 text-blue-600"
                     />
                     <span className="ml-2 text-gray-700">{option}</span>
@@ -189,13 +223,58 @@ const ProfilePage = () => {
                 type="text"
                 id={field}
                 name={field}
-                value={userData[field]}
-                onChange={handleInputChange}
+                value={formData[field]}
+                onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
                 placeholder={`Enter your ${field}`}
                 className="w-full border-gray-300 border rounded-md p-2 focus:outline-black"
               />
             </div>
           ))}
+
+          {/* Submit Button */}
+          <div className="mt-6 flex font-bold justify-end">
+            <button
+              onClick={saveAllData}
+              disabled={!hasChanges || isLoading}
+              aria-label={isLoading ? "Saving profile" : "Submit profile"}
+              className={`relative py-2.5 text-sm rounded-md flex items-center justify-center 
+                w-48
+                ${
+                  hasChanges
+                    ? "bg-[#0095f6] hover:bg-[#1a77f2] text-white"
+                    : "bg-[#c0dffd] text-gray-100 cursor-not-allowed"
+                } transition duration-200`}
+            >
+              {/* Submit Text */}
+              <span
+                className={`transition-opacity duration-200 ${isLoading ? 'opacity-0 absolute' : 'opacity-100'}`}
+              >
+                Submit
+              </span>
+              
+              {/* Loading Spinner */}
+              <svg
+                className={`animate-spin h-5 w-5 text-white transition-opacity duration-200 ${isLoading ? 'opacity-100' : 'opacity-0 absolute'}`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </div>
       </main>
 
@@ -228,6 +307,13 @@ const ProfilePage = () => {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Notification Pop-Up */}
+      {showNotification && (
+        <div className="fixed w-full bottom-0 bg-gray-900 text-white px-4 py-2 rounded-md shadow-lg animate-slide-in">
+          Profile saved successfully!
         </div>
       )}
     </div>

@@ -1,28 +1,35 @@
-export async function genFullConvo(botId, botData, chatData, setChatData, userData, messageLimit = 10) {
+export async function genFullConvo(
+    botId,
+    botData,
+    chatData,
+    setChatData,
+    userData,
+    setCompatibilityScores, // Function to update compatibility scores
+    compatibilityScores, // Array to store compatibility scores
+    messageLimit = 10
+  ) {
     console.log("genFullConvo called with botId:", botId);
     console.log("Bot data:", botData);
     console.log("User data:", userData);
     console.log("Chat data:", chatData);
   
-    // Use environment variable for API endpoint
     const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:8080";
     console.log(`[${new Date().toISOString()}] Using API endpoint:`, apiEndpoint);
   
     let updatedChat = [...chatData]; // Copy the existing chat data
+    let lastPayload = null; // Define a variable to hold the last payload used
   
-    // Helper function for random delay
     const randomDelay = () => {
       const delay = Math.random() * 1000 + 1000; // 1 to 2 seconds
       return new Promise((resolve) => setTimeout(resolve, delay));
     };
   
     for (let i = updatedChat.length; i < messageLimit; i++) {
-      // Determine whose turn it is: alternate between the user and the bot
       const currentSpeaker = i % 2 === 0 ? botData : userData; // The one receiving the message
-      const otherSpeaker = i % 2 === 0 ? userData : botData; // Alternate between userData and botData
+      const otherSpeaker = i % 2 === 0 ? userData : botData;
   
-      // Construct the payload for the current speaker
-      const payload = {
+      // Construct the payload
+      lastPayload = {
         personOne: {
           name: currentSpeaker.name,
           profilePicture: currentSpeaker.profilePicture,
@@ -53,19 +60,17 @@ export async function genFullConvo(botId, botData, chatData, setChatData, userDa
         }),
       };
   
-      console.log(`[${new Date().toISOString()}] Payload for API (Speaker: ${currentSpeaker.name}):`, payload);
+      console.log(`[${new Date().toISOString()}] Payload for API (Speaker: ${currentSpeaker.name}):`, lastPayload);
   
       try {
-        // Add random delay before making the request
         await randomDelay();
   
-        // Make HTTP POST request to the API
-        const response = await fetch(apiEndpoint, {
+        const response = await fetch(`${apiEndpoint}/query`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(payload), // Send the payload as the body
+          body: JSON.stringify(lastPayload),
         });
   
         if (!response.ok) {
@@ -80,26 +85,55 @@ export async function genFullConvo(botId, botData, chatData, setChatData, userDa
           throw new Error("API response does not contain 'response' field.");
         }
   
-        // Add the response to the chat history
         updatedChat.push([data.response, currentSpeaker === userData ? "user" : "ai"]);
-  
         console.log(`[${new Date().toISOString()}] Updated chat history:`, updatedChat);
   
-        // Save updated chat history to context
         setChatData((prevData) => {
           const newData = [...prevData];
-          newData[botId] = updatedChat; // Update only the specific bot's chat data
+          newData[botId] = updatedChat;
           return newData;
         });
   
-        // Break early if we reach the message limit
         if (updatedChat.length >= messageLimit) break;
       } catch (error) {
         console.error(`[${new Date().toISOString()}] Error in genFullConvo:`, error);
-        throw error; // Stop the loop on error
+        throw error;
       }
     }
   
-    return updatedChat; // Return the full conversation
+    // After reaching message limit, make a request to /match
+    try {
+      const matchResponse = await fetch(`${apiEndpoint}/match`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(lastPayload), // Use the last payload from the loop
+      });
+  
+      if (!matchResponse.ok) {
+        const errorText = await matchResponse.text();
+        throw new Error(`HTTP error on /match! Status: ${matchResponse.status}, Message: ${errorText}`);
+      }
+  
+      const matchData = await matchResponse.json();
+      console.log(`[${new Date().toISOString()}] Match response:`, matchData);
+  
+      if (!matchData.compatibility.score) {
+        throw new Error("Match response does not contain 'score' field.");
+      }
+  
+      setCompatibilityScores((prevScores) => {
+        const newScores = [...prevScores];
+        newScores[botId] = matchData.compatibility.score;
+        return newScores;
+      });
+  
+      console.log(`Compatibility score for botId ${botId}:`, matchData.compatibility.score);
+    } catch (error) {
+      console.error(`[${new Date().toISOString()}] Error fetching compatibility score:`, error);
+    }
+  
+    return updatedChat;
   }
   

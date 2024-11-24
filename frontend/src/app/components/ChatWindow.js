@@ -7,7 +7,7 @@ import { genFullConvo } from '../../utils/genConvos';
 import styles from './ChatWindow.module.css';
 
 const ChatWindow = ({ selectedContactId, onSendMessage }) => {
-  const { bots, chatData, setChatData, userData } = useAppContext();
+  const { bots, chatData, setChatData, userData, compatibilityScores, setCompatibilityScores, read, setRead  } = useAppContext(); // Access bots, chat data, and user data from context
   const [loading, setLoading] = useState(false); // Loading state
 
   // Retrieve messages for the selected bot
@@ -24,7 +24,9 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
         bots[selectedContactId],
         chatData[selectedContactId],
         setChatData,
-        userData
+        userData,
+        setCompatibilityScores, // Pass setCompatibilityScores
+        compatibilityScores // Pass compatibilityScores
       );
     } catch (error) {
       console.error('Error generating conversation:', error);
