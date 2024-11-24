@@ -1,93 +1,96 @@
-export async function genConvo(botId, botData, chatHistory, setChatData, userData) {
-    console.log("genConvo called with botId:", botId);
+export async function genFullConvo(botId, botData, chatData, setChatData, userData, messageLimit = 10) {
+    console.log("genFullConvo called with botId:", botId);
     console.log("Bot data:", botData);
     console.log("User data:", userData);
-    console.log("Chat history:", chatHistory);
+    console.log("Chat data:", chatData);
   
-    // Ensure chatHistory is an array
-    const validChatHistory = Array.isArray(chatHistory) ? chatHistory : [];
-    let updatedChat = [...validChatHistory];
+    // Use environment variable for API endpoint
+    const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:8080";
+    console.log(`[${new Date().toISOString()}] Using API endpoint:`, apiEndpoint);
   
-    if (updatedChat.length === 0) {
-      updatedChat.push({ role: "user", content: `Hi ${botData.name}, let's talk!` });
-      console.log("Initialized chat with first user message:", updatedChat);
+    let updatedChat = [...chatData]; // Copy the existing chat data
+  
+    for (let i = updatedChat.length; i < messageLimit; i++) {
+      // Determine whose turn it is: alternate between the user and the bot
+      const currentSpeaker = i % 2 === 0 ? botData : userData; // The one receiving the message
+      const otherSpeaker = i % 2 === 0 ? userData : botData; // Alternate between userData and botData
+      
+      // Construct the payload for the current speaker
+      const payload = {
+        personOne: {
+          name: currentSpeaker.name,
+          profilePicture: currentSpeaker.profilePicture,
+          personality: currentSpeaker.personality,
+          twitter: currentSpeaker.twitter,
+          instagram: currentSpeaker.instagram,
+          linkedin: currentSpeaker.linkedin,
+          facebook: currentSpeaker.facebook,
+          hobbies: currentSpeaker.hobbies,
+          job: currentSpeaker.job,
+          interests: currentSpeaker.interests,
+        },
+        personTwo: {
+          name: otherSpeaker.name,
+          profilePicture: otherSpeaker.profilePicture,
+          personality: otherSpeaker.personality,
+          twitter: otherSpeaker.twitter,
+          instagram: otherSpeaker.instagram,
+          linkedin: otherSpeaker.linkedin,
+          facebook: otherSpeaker.facebook,
+          hobbies: otherSpeaker.hobbies,
+          job: otherSpeaker.job,
+          interests: otherSpeaker.interests,
+        },
+        messageHistory: updatedChat.map(([content, role]) => {
+          const participant = role === "user" ? userData.name : botData.name;
+          return { role: participant, content };
+        }),
+      };
+  
+      console.log(`[${new Date().toISOString()}] Payload for API (Speaker: ${currentSpeaker.name}):`, payload);
+  
+      try {
+        // Make HTTP POST request to the API
+        const response = await fetch(apiEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload), // Send the payload as the body
+        });
+  
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+        }
+  
+        const data = await response.json();
+        console.log(`[${new Date().toISOString()}] Response from API:`, data);
+  
+        if (!data.response) {
+          throw new Error("API response does not contain 'response' field.");
+        }
+  
+        // Add the response to the chat history
+        updatedChat.push([data.response, currentSpeaker === userData ? "user" : "ai"]);
+  
+        console.log(`[${new Date().toISOString()}] Updated chat history:`, updatedChat);
+  
+        // Save updated chat history to context
+        setChatData((prevData) => {
+          const newData = [...prevData];
+          newData[botId] = updatedChat; // Update only the specific bot's chat data
+          return newData;
+        });
+  
+        // Break early if we reach the message limit
+        if (updatedChat.length >= messageLimit) break;
+      } catch (error) {
+        console.error(`[${new Date().toISOString()}] Error in genFullConvo:`, error);
+        throw error; // Stop the loop on error
+      }
     }
   
-    const ws = new WebSocket("ws://195.242.13.27:8080");
-    console.log("WebSocket connection initialized to:", "ws://195.242.13.27:8080");
-  
-    return new Promise((resolve, reject) => {
-      ws.onopen = () => {
-        console.log("WebSocket connection opened.");
-  
-        // Generate the prompt to pass to the LLM
-        const generatePrompt = (userMessage) => {
-          return `
-            User: ${userData.name}
-            Personality: ${userData.personality.summary}
-            Interests: ${userData.interests}
-            Bot: ${botData.name}
-            Personality: ${botData.personality.summary}
-            Social Media:
-              - Twitter: ${botData.twitter}
-              - Instagram: ${botData.instagram}
-              - LinkedIn: ${botData.linkedin}
-              - Facebook: ${botData.facebook}
-            Chat History:
-            ${updatedChat.map((message) => `${message.role === "user" ? "User" : "Bot"}: ${message.content}`).join("\n")}
-            User: ${userMessage}
-          `.trim();
-        };
-  
-        const sendMessageToLLM = (message) => {
-          const prompt = generatePrompt(message);
-  
-          const payload = JSON.stringify({
-            prompt, // Include the generated prompt
-          });
-          console.log("Sending message to LLM:", payload);
-          ws.send(payload);
-        };
-  
-        sendMessageToLLM("Hi!");
-  
-        ws.onmessage = (event) => {
-          console.log("Message received from LLM:", event.data);
-          const data = JSON.parse(event.data);
-  
-          const turn = updatedChat.length % 2 === 0 ? "assistant" : "user";
-          console.log("Turn determined:", turn);
-  
-          updatedChat.push({
-            role: turn,
-            content: data.response,
-          });
-          console.log("Updated chat history:", updatedChat);
-  
-          if (updatedChat.length >= 10) {
-            console.log("Conversation reached 10 messages. Closing WebSocket.");
-            ws.close();
-            setChatData((prevData) => {
-              const newData = [...prevData];
-              newData[botId] = updatedChat; // Update only the specific bot's chat data
-              return newData;
-            });
-            resolve(updatedChat);
-          } else if (turn === "user") {
-            console.log("Sending next user message.");
-            sendMessageToLLM("What do you think?");
-          }
-        };
-  
-        ws.onerror = (error) => {
-          console.error("WebSocket error:", error);
-          reject(error);
-        };
-  
-        ws.onclose = () => {
-          console.log("WebSocket closed.");
-        };
-      };
-    });
+    return updatedChat; // Return the full conversation
   }
   

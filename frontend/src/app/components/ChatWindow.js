@@ -1,19 +1,56 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import ChatMessage from './ChatMessage';
 import InputBar from './InputBar';
 import { useAppContext } from '../../context/AppContext';
+import { genFullConvo } from '../../utils/genConvos';
+import styles from './ChatWindow.module.css';
 
 const ChatWindow = ({ selectedContactId, onSendMessage }) => {
-  const { chatData } = useAppContext();
-    console.log(chatData)
-  // Ensure messages fallback to an empty array if selectedContactId is invalid
+  const { bots, chatData, setChatData, userData } = useAppContext();
+  const [loading, setLoading] = useState(false); // Loading state
+
+  // Retrieve messages for the selected bot
   const messages = selectedContactId !== null && chatData[selectedContactId] ? chatData[selectedContactId] : [];
-  console.log(selectedContactId)  
-  console.log(messages)
+
+  // Determine the turn based on the length of the messages array
+  const isUserTurn = messages.length % 2 === 1;
+
+  const handleConversation = async () => {
+    setLoading(true);
+    try {
+      await genFullConvo(
+        selectedContactId,
+        bots[selectedContactId],
+        chatData[selectedContactId],
+        setChatData,
+        userData
+      );
+    } catch (error) {
+      console.error('Error generating conversation:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="w-2/3 flex flex-col h-full">
+      <button
+        onClick={handleConversation}
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          backgroundColor: '#007BFF',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+        disabled={loading}
+      >
+        Talk
+      </button>
+
       {/* Messages Section */}
       <div className="flex-grow overflow-y-auto p-4 bg-white">
         {messages.map(([text, sender], index) => {
@@ -39,6 +76,21 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
             />
           );
         })}
+
+        {/* Typing Bubble */}
+        {loading && (
+          <div
+            className={`${styles.typingBubble} ${
+              isUserTurn ? styles.typingBubbleRight : styles.typingBubbleLeft
+            }`}
+          >
+            <div className={`${styles.bubble} ${isUserTurn ? styles.bubbleRight : styles.bubbleLeft}`}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Input Section */}
