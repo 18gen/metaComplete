@@ -15,6 +15,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "ollama": "^0.5.10",
+    "sentiment": "^5.0.2",
     "ws": "^8.18.0"
   },
   "type": "module"
