@@ -20,10 +20,10 @@ async function queryOllama(personOne, personTwo, messageHistory) {
         if (messageHistory.length !== 0) {
             console.log("Business as usual");
             currentUser = messageHistory[messageHistory.length - 1].role == personOne.name ? personTwo.name : personOne.name;
-            state = "Continue the conversation";
+            state = "Respond to this conversation";
         }
         const updatedMessageHistory = replaceRoles(messageHistory);
-        const systemPrompt = `You are ${currentUser}. You are having a conversation with ${currentUser == personOne.name ? personTwo.name : personOne.name}. ${state} based on these personalities. Your response should be one sentence max. ${JSON.stringify(personOne)} and ${JSON.stringify(personTwo)}`;
+        const systemPrompt = `You are ${currentUser}. You are having a conversation with ${currentUser == personOne.name ? personTwo.name : personOne.name}. ${state} based on these personalities. You are texting, messages should be short and concise. You should say at MAX one sentence. ${JSON.stringify(personOne)} and ${JSON.stringify(personTwo)}`;
         let messages = [
                 {
                     "role": "system",
@@ -43,6 +43,9 @@ async function queryOllama(personOne, personTwo, messageHistory) {
             model: 'llama3.2',
             messages: messages,
             stream: false,
+            options: {
+                max_length: 100
+            }
         };
 
         const response = await axios.post(url, payload, {
