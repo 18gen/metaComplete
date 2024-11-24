@@ -183,6 +183,140 @@ function generateCompatibilityAnalysis(score1, score2, personalityScore) {
     return "Very positive interaction pattern";
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//function to provide suggestion responses based on people personailty and message history
+// Helper function to analyze personality compatibility
+function analyzePersonalityCompatibility(personOne, personTwo) {
+    const compatibility = {
+        energyMatch: personOne.personality.energyStyle === personTwo.personality.energyStyle,
+        cognitiveMatch: personOne.personality.cognitiveStyle === personTwo.personality.cognitiveStyle,
+        valuesMatch: personOne.personality.valuesStyle === personTwo.personality.valuesStyle,
+        lifeStyleMatch: personOne.personality.lifeStyle === personTwo.personality.lifeStyle
+    };
+    return compatibility;
+}
+
+// Helper function to analyze conversation tone
+function analyzeConversationTone(messageHistory) {
+    const sentiment = new Sentiment();
+    const lastMessages = messageHistory.slice(-3); // Get last 3 messages
+    const toneAnalysis = lastMessages.map(msg => sentiment.analyze(msg.content));
+    
+    const averageScore = toneAnalysis.reduce((acc, curr) => acc + curr.score, 0) / toneAnalysis.length;
+    return {
+        overall: averageScore,
+        isPositive: averageScore > 0,
+        isNeutral: averageScore === 0,
+        isNegative: averageScore < 0
+    };
+}
+
+// Helper function to generate suggestions based on personality and context
+function generateSuggestions(personOne, personTwo, messageHistory) {
+    const lastMessage = messageHistory[messageHistory.length - 1];
+    const compatibility = analyzePersonalityCompatibility(personOne, personTwo);
+    const tone = analyzeConversationTone(messageHistory);
+    
+    const suggestions = [];
+    
+    // Generate suggestions based on personality and conversation context
+    if (lastMessage.role === personTwo.name) {
+        // Responding as personOne
+        if (tone.isPositive) {
+            suggestions.push({
+                type: "enthusiastic",
+                content: `I appreciate your perspective on ${personTwo.interests.split(',')[0]}. Let's explore how it connects with ${personOne.interests.split(',')[0]}.`
+            });
+        }
+        
+        // Add suggestion based on personality traits
+        if (!compatibility.cognitiveMatch) {
+            suggestions.push({
+                type: "bridge_differences",
+                content: `While I tend to focus on ${personOne.personality.cognitiveStyle} aspects, I'm curious about your ${personTwo.personality.cognitiveStyle} approach to this topic.`
+            });
+        }
+        
+        // Add suggestion based on shared interests
+        suggestions.push({
+            type: "common_ground",
+            content: `Your background in ${personTwo.job} offers an interesting perspective on how ${personOne.interests.split(',')[0]} might impact society.`
+        });
+    }
+    
+    // Ensure we have exactly 3 suggestions
+    while (suggestions.length < 3) {
+        suggestions.push({
+            type: "generic",
+            content: `I'd like to hear more about your thoughts on how ${personOne.interests.split(',')[0]} could benefit from your expertise in ${personTwo.job}.`
+        });
+    }
+    
+    return suggestions.slice(0, 3); // Ensure exactly 3 suggestions
+}
+
+// Suggestions endpoint
+app.post('/suggestions', async (req, res) => {
+    const { personOne, personTwo, messageHistory } = req.body;
+    
+    if (!personOne || !personTwo || !messageHistory) {
+        return res.status(400).json({ 
+            error: 'Missing required parameters',
+            required: ['personOne', 'personTwo', 'messageHistory']
+        });
+    }
+    
+    try {
+        const suggestions = generateSuggestions(personOne, personTwo, messageHistory);
+        
+        res.json({
+            suggestions,
+            metadata: {
+                basedOn: {
+                    lastMessage: messageHistory[messageHistory.length - 1],
+                    personality: personOne.personality.summary,
+                    interests: personOne.interests
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error generating suggestions:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate suggestions',
+            details: error.message 
+        });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.listen(port, 'localhost', () => {
     console.log(`Server is listening on http://0.0.0.0:${port}`);
 });
