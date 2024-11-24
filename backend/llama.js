@@ -126,4 +126,38 @@ async function llamaSuggestion(tone, currentUser, messageHistory, personOne, per
     }
 }
 
+
+export async function summarize(text) {
+    const prompt = 'Summarize the following text into one concise sentence:\n\n' + text;
+
+    try {
+        let messages = [
+            {
+                "role": "system",
+                "content": prompt
+            },
+        ];
+
+        const url = `${nebiusUrl}/api/chat`; // Local chat endpoint for Ollama
+
+        const payload = {
+            model: 'llama3.2',
+            messages: messages,
+            stream: false,
+            options: {
+                max_length: 100
+            }
+        };
+
+        const response = await axios.post(url, payload, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        console.log(response.data.message)
+        return response.data.message.content;
+    } catch (error) {
+        console.error('Error querying Ollama chat endpoint for summarize:', error.message);
+        throw new Error('Failed to get a response from Ollama');
+    }
+}
+
 export default { queryOllama, generateSuggestions} ;

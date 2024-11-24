@@ -199,3 +199,4 @@ export function match(personOne, personTwo, messageHistory) {
 }
 
 export default { analyzeConversationTone, generateInterestingReply, analyzePersonalityCompatibility, calculateCompatibilityScore, generateCompatibilityAnalysis, calculatePersonalityCompatibility, match };
+
