@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import queryOllama from './llama.js';
+import { queryOllama, generateSuggestions } from './llama.js';
 import cors from 'cors';
 import Sentiment from 'sentiment';
 
@@ -183,22 +183,6 @@ function generateCompatibilityAnalysis(score1, score2, personalityScore) {
     return "Very positive interaction pattern";
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //function to provide suggestion responses based on people personailty and message history
 // Helper function to analyze personality compatibility
 function analyzePersonalityCompatibility(personOne, personTwo) {
@@ -227,48 +211,48 @@ function analyzeConversationTone(messageHistory) {
 }
 
 // Helper function to generate suggestions based on personality and context
-function generateSuggestions(personOne, personTwo, messageHistory) {
-    const lastMessage = messageHistory[messageHistory.length - 1];
-    const compatibility = analyzePersonalityCompatibility(personOne, personTwo);
-    const tone = analyzeConversationTone(messageHistory);
-    
-    const suggestions = [];
-    
-    // Generate suggestions based on personality and conversation context
-    if (lastMessage.role === personTwo.name) {
-        // Responding as personOne
-        if (tone.isPositive) {
-            suggestions.push({
-                type: "enthusiastic",
-                content: `I appreciate your perspective on ${personTwo.interests.split(',')[0]}. Let's explore how it connects with ${personOne.interests.split(',')[0]}.`
-            });
-        }
-        
-        // Add suggestion based on personality traits
-        if (!compatibility.cognitiveMatch) {
-            suggestions.push({
-                type: "bridge_differences",
-                content: `While I tend to focus on ${personOne.personality.cognitiveStyle} aspects, I'm curious about your ${personTwo.personality.cognitiveStyle} approach to this topic.`
-            });
-        }
-        
-        // Add suggestion based on shared interests
-        suggestions.push({
-            type: "common_ground",
-            content: `Your background in ${personTwo.job} offers an interesting perspective on how ${personOne.interests.split(',')[0]} might impact society.`
-        });
-    }
-    
-    // Ensure we have exactly 3 suggestions
-    while (suggestions.length < 3) {
-        suggestions.push({
-            type: "generic",
-            content: `I'd like to hear more about your thoughts on how ${personOne.interests.split(',')[0]} could benefit from your expertise in ${personTwo.job}.`
-        });
-    }
-    
-    return suggestions.slice(0, 3); // Ensure exactly 3 suggestions
-}
+// function generateSuggestions(personOne, personTwo, messageHistory) {
+//     const lastMessage = messageHistory[messageHistory.length - 1];
+//     const compatibility = analyzePersonalityCompatibility(personOne, personTwo);
+//     const tone = analyzeConversationTone(messageHistory);
+//
+//     const suggestions = [];
+//
+//     // Generate suggestions based on personality and conversation context
+//     if (lastMessage.role === personTwo.name) {
+//         // Responding as personOne
+//         if (tone.isPositive) {
+//             suggestions.push({
+//                 type: "enthusiastic",
+//                 content: `I appreciate your perspective on ${personTwo.interests.split(',')[0]}. Let's explore how it connects with ${personOne.interests.split(',')[0]}.`
+//             });
+//         }
+//
+//         // Add suggestion based on personality traits
+//         if (!compatibility.cognitiveMatch) {
+//             suggestions.push({
+//                 type: "bridge_differences",
+//                 content: `While I tend to focus on ${personOne.personality.cognitiveStyle} aspects, I'm curious about your ${personTwo.personality.cognitiveStyle} approach to this topic.`
+//             });
+//         }
+//
+//         // Add suggestion based on shared interests
+//         suggestions.push({
+//             type: "common_ground",
+//             content: `Your background in ${personTwo.job} offers an interesting perspective on how ${personOne.interests.split(',')[0]} might impact society.`
+//         });
+//     }
+//
+//     // Ensure we have exactly 3 suggestions
+//     while (suggestions.length < 3) {
+//         suggestions.push({
+//             type: "generic",
+//             content: `I'd like to hear more about your thoughts on how ${personOne.interests.split(',')[0]} could benefit from your expertise in ${personTwo.job}.`
+//         });
+//     }
+//
+//     return suggestions.slice(0, 3); // Ensure exactly 3 suggestions
+// }
 
 // Suggestions endpoint
 app.post('/suggestions', async (req, res) => {
@@ -282,8 +266,8 @@ app.post('/suggestions', async (req, res) => {
     }
     
     try {
-        const suggestions = generateSuggestions(personOne, personTwo, messageHistory);
-        
+        const suggestions = await generateSuggestions(personOne, personTwo, messageHistory);
+        console.log(suggestions);
         res.json({
             suggestions,
             metadata: {
@@ -355,10 +339,6 @@ app.post('/topic', async (req, res) => {
         });
     }
 });
-
-
-
-
 
 app.listen(port, 'localhost', () => {
     console.log(`Server is listening on http://0.0.0.0:${port}`);
