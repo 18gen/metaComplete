@@ -1,6 +1,6 @@
-"use client";
+'use client';
+
 import Image from "next/image";
-import userLogo from "../../../public/instagramPage/userLogo.jpg";
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { useAppContext } from "../../context/AppContext"; 
@@ -69,7 +69,7 @@ const ProfilePage = () => {
         {/* User Info Section */}
         <div className="flex items-center mb-8">
           <Image
-            src={userLogo}
+            src={`/instagramPage/userLogo.jpg`}
             alt="User Logo"
             width={150}
             height={150}
