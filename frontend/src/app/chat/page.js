@@ -25,7 +25,6 @@ const Home = () => {
       });
     }
   };
-
   return (
     <div className="flex h-screen">
       <ChatSidebar

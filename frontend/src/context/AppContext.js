@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 const AppContext = createContext();
 
@@ -207,6 +207,15 @@ export function AppContextProvider({ children }) {
     [], 
     []
   ]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedData = localStorage.getItem('userData');
+      if (storedData) {
+        setUserData(JSON.parse(storedData));
+      }
+    }
+  }, []);
 
   const value = {
     userData,
