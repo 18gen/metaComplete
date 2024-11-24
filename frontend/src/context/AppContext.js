@@ -191,7 +191,7 @@ export function AppContextProvider({ children }) {
   ]);
 
   const [chatData, setChatData] = useState([
-    [["Message1", "ai"], ["Message2", "user"], ["Message3", "ai"]], // Array of message arrays
+    [["Message1", "ai"], ["Message2", "user"], ["Message3", "ai"], ["Message3", "ai"], ["Message3", "ai"], ["Message3", "ai"]], // Array of message arrays
     [], 
     [], 
     [], 
