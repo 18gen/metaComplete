@@ -23,7 +23,7 @@ async function queryOllama(personOne, personTwo, messageHistory) {
             state = "Respond to this conversation";
         }
         const updatedMessageHistory = replaceRoles(messageHistory);
-        const systemPrompt = `You are ${currentUser}. You are having a conversation with ${currentUser == personOne.name ? personTwo.name : personOne.name}. ${state} based on these personalities. You are texting, messages should be short and concise. You should say at MAX one sentence. ${JSON.stringify(personOne)} and ${JSON.stringify(personTwo)}`;
+        const systemPrompt = `You are ${currentUser}. You are having a conversation with ${currentUser == personOne.name ? personTwo.name : personOne.name}. ${state} based on these personalities. ${JSON.stringify(personOne)} and ${JSON.stringify(personTwo)}. Your messages should be short and concise. You should say at MAX one sentence. DO NOT MENTION the other person's name at the start or end of your response.`;
         let messages = [
                 {
                     "role": "system",
