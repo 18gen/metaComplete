@@ -50,28 +50,28 @@ const stories = [
 
 const posts = [
   {
-    user_name: "Gen",
-    avatar: "/member/gen.jpg",
-    image: "/post/logo.PNG",
-    caption: "",
+    user_name: "James",
+    avatar: "/member/james_2.jpeg",
+    image: "/post/1.jpg",
+    caption: "#MetaLlamaHacks #Area2",
+  },
+  {
+    user_name: "James",
+    avatar: "/member/james_2.jpeg",
+    image: "/post/2.jpg",
+    caption: "#foreverAlone #Isolation",
   },
   {
     user_name: "Gen",
     avatar: "/member/gen.jpg",
-    image: "/post/slide1.webp",
-    caption: "",
+    image: "/post/3.jpg",
+    caption: "#aiClone #anotherMe",
   },
   {
     user_name: "Gen",
     avatar: "/member/gen.jpg",
-    image: "/post/allnighter.jpg",
-    caption: "all nighters!! #MetaLlamaHacks #SheratonHotel",
-  },
-  {
-    user_name: "Danny",
-    avatar: "/member/danny.jpg",
-    image: "/post/idea.jpg",
-    caption: "We're brainstorming...🧠",
+    image: "/post/4.jpg",
+    caption: "Let us introduce...🚀",
   },
 ];
 
@@ -169,7 +169,7 @@ const RightSide = () => {
                 className="w-10 h-10 rounded-full"
               />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-800">user_{index}</p>
+                <p className="text-sm font-medium text-gray-800">{suggestion.user_name}</p>
                 <p className="text-xs text-gray-500">Followed by other_user</p>
               </div>
               <button className="ml-auto text-blue-500 text-sm font-semibold">
