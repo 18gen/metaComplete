@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { instagram } from "../../../../public/instagramPage";
+import { instagram } from "../../../public/instagramPage";
 const Sidebar = () => {
   const topLinks = [
     "Home", "Search", "Explore", "Reels", "Messages", "Notifications",
@@ -11,7 +11,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="lg:flex flex-col fixed top-0 left-0 h-full w-60 bg-white border-r border-gray-200 p-4">
+    <aside className="lg:flex flex-col fixed top-0 left-0 h-full w-60 bg-white border-r border-gray-200 p-6">
         <Image src={instagram} alt="Logo" className="mb-5" width={100} height={40} />
         <nav className="flex flex-col mb-auto">
             {topLinks.map((link, index) => (
