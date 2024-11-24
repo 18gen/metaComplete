@@ -10,6 +10,24 @@ const port = 3001;
 app.use(bodyParser.json());
 app.use(cors());
 
+// Endpoint to handle requests
+app.post('/query', async (req, res) => {
+    const { personOne, personTwo, messageHistory } = req.body;
+
+    if (!personOne | !personTwo | !messageHistory ) {
+        return res.status(400).json({ error: 'Missing parameters' });
+    }
+
+    try {
+        const response = await queryOllama(personOne, personTwo, messageHistory); // Query the model
+        console.log('Sent response');
+        res.json({ response }); // Respond to the client with the result
+    } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({ error: 'Unable to process your request' });
+    }
+});
+
 app.post('/match', async (req, res) => {
     const { personOne, personTwo, messageHistory } = req.body;
 
