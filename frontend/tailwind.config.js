@@ -11,6 +11,9 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        sans: ['Proxima Nova', 'Arial', 'Helvetica', 'sans-serif'],
+      },
     },
   },
   plugins: [],

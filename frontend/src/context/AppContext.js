@@ -4,28 +4,44 @@ import React, { createContext, useState, useContext } from "react";
 const AppContext = createContext();
 
 export function AppContextProvider({ children }) {
-  const [userData, setUserData] = useState({
-    name: "Ada Lovelace",
-    profilePicture: "ada_lovelace.png",
-    personality: {
-      summary:
-        "Visionary and analytical, combining creativity with logic to pioneer new ideas.",
-      energyStyle: "Introvert",
-      cognitiveStyle: "Intuitive",
-      valuesStyle: "Thinkers",
-      lifeStyle: "Judgers",
-    },
-    twitter:
-      "Shares insights about mathematics, technology, and the future of computation.",
-    instagram: "Posts elegant hand-written notes and diagrams of algorithms.",
-    linkedin: "Discusses the importance of innovation and women in technology.",
-    facebook:
-      "Engages with stories about advancements in programming and historical figures in science.",
-    hobbies: "Writing algorithms, reading literature, solving puzzles.",
-    job: "Mathematician and first computer programmer.",
-    interests:
-      "Programming, mathematics, innovation, women's empowerment in STEM.",
-  });
+    const [userData, setUserData] = useState({
+        name: "Ada Lovelace",
+        profilePicture: "ada_lovelace.png", // Added profile picture
+        personality: {
+          summary: "Visionary and analytical, combining creativity with logic to pioneer new ideas.",
+          energyStyle: "Introverted",
+          cognitiveStyle: "Sensor",
+          valuesStyle: "Feeler",
+          lifeStyle: "Judger"
+        },
+        twitter: "Shares insights about mathematics, technology, and the future of computation.",
+        instagram: "Posts elegant hand-written notes and diagrams of algorithms.",
+        linkedin: "Discusses the importance of innovation and women in technology.",
+        facebook: "Engages with stories about advancements in programming and historical figures in science.",
+        hobbies: "Writing algorithms, reading literature, solving puzzles.",
+        job: "Mathematician and first computer programmer.",
+        interests: "Programming, mathematics, innovation, women's empowerment in STEM."
+      });
+      
+    // The commented-out userData remains untouched
+    // const [userData, setUserData] = useState({
+    //     name: "",
+    //     profilePicture: "",
+    //     personality: {
+    //         summary: "",
+    //         energyStyle: "",
+    //         cognitiveStyle: "",
+    //         valuesStyle: "",
+    //         lifeStyle: "",
+    //     },
+    //     twitter: "",
+    //     instagram: "",
+    //     linkedin: "",
+    //     facebook: "",
+    //     hobbies: "",
+    //     job: "",
+    //     interests: "",
+    // });
 
   const [bots, setBots] = useState([
     {
@@ -35,8 +51,8 @@ export function AppContextProvider({ children }) {
         summary: "Empathetic visionary focused on scientific discoveries.",
         energyStyle: "Introvert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Feelers",
-        lifeStyle: "Judgers",
+        valuesStyle: "Feeler",
+        lifeStyle: "Judging",
       },
       twitter: "Shares scientific discoveries and inspirational quotes.",
       instagram:
@@ -55,8 +71,8 @@ export function AppContextProvider({ children }) {
         summary: "Curious innovator who loves tackling theoretical challenges.",
         energyStyle: "Introvert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Thinkers",
-        lifeStyle: "Perceivers",
+        valuesStyle: "Thinker",
+        lifeStyle: "Perceiver",
       },
       twitter: "Shares thought-provoking insights and quirky jokes.",
       instagram: "Posts picturesque photos of his blackboard equations.",
@@ -75,8 +91,8 @@ export function AppContextProvider({ children }) {
           "Charismatic motivator who inspires self-growth and empowerment.",
         energyStyle: "Extravert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Feelers",
-        lifeStyle: "Judgers",
+        valuesStyle: "Feeler",
+        lifeStyle: "Judging",
       },
       twitter: "Encourages self-care and shares motivational content.",
       instagram:
@@ -94,8 +110,8 @@ export function AppContextProvider({ children }) {
         summary: "Strategic planner with a passion for art and invention.",
         energyStyle: "Introvert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Thinkers",
-        lifeStyle: "Judgers",
+        valuesStyle: "Thinker",
+        lifeStyle: "Judging",
       },
       twitter: "Shares sketches and fascinating inventions.",
       instagram: "Curates a blend of art and anatomy studies.",
@@ -109,12 +125,11 @@ export function AppContextProvider({ children }) {
       name: "Serena Williams",
       profilePicture: "serena_williams.png",
       personality: {
-        summary:
-          "Confident leader who values structure and discipline in sports.",
-        energyStyle: "Extravert",
-        cognitiveStyle: "Sensors",
-        valuesStyle: "Thinkers",
-        lifeStyle: "Judgers",
+        summary: "Confident leader who values structure and discipline in sports.",
+        energyStyle: "Extraverted",
+        cognitiveStyle: "Sensor",
+        valuesStyle: "Thinker",
+        lifeStyle: "Judging",
       },
       twitter: "Motivates fans with fitness tips and career highlights.",
       instagram: "Posts tennis training routines and family moments.",
@@ -131,8 +146,8 @@ export function AppContextProvider({ children }) {
         summary: "Visionary problem solver passionate about cosmology.",
         energyStyle: "Introvert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Thinkers",
-        lifeStyle: "Perceivers",
+        valuesStyle: "Thinker",
+        lifeStyle: "Perceiver",
       },
       twitter: "Explains complex physics topics with simplicity and humor.",
       instagram: "Shares stunning visuals of space and the universe.",
@@ -147,12 +162,11 @@ export function AppContextProvider({ children }) {
       name: "Frida Kahlo",
       profilePicture: "frida_kahlo.png",
       personality: {
-        summary:
-          "Artistic and sensitive, exploring creativity and self-expression.",
-        energyStyle: "Introvert",
-        cognitiveStyle: "Sensors",
-        valuesStyle: "Feelers",
-        lifeStyle: "Perceivers",
+        summary: "Artistic and sensitive, exploring creativity and self-expression.",
+        energyStyle: "Introverted",
+        cognitiveStyle: "Sensor",
+        valuesStyle: "Feeler",
+        lifeStyle: "Perceiver",
       },
       twitter: "Expresses personal experiences through poetic tweets.",
       instagram: "Features bold artwork and snippets of her colorful life.",
@@ -169,8 +183,8 @@ export function AppContextProvider({ children }) {
         summary: "Curious innovator driven by futuristic inventions.",
         energyStyle: "Extravert",
         cognitiveStyle: "Intuitive",
-        valuesStyle: "Thinkers",
-        lifeStyle: "Perceivers",
+        valuesStyle: "Thinker",
+        lifeStyle: "Perceiver",
       },
       twitter:
         "Shares ideas for futuristic inventions and energy breakthroughs.",
@@ -184,14 +198,14 @@ export function AppContextProvider({ children }) {
   ]);
 
   const [chatData, setChatData] = useState([
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
+    [], 
+    [], 
+    [], 
+    [], 
+    [], 
+    [], 
+    [], 
+    []
   ]);
 
   const value = {

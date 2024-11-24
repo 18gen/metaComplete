@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  app:
+    image: jamesliangg/metallamabb # Use the prebuilt image
+    ports:
+      - "8080:8080" # Map port 8080 from the container to the host
+    restart: always # Optional: Automatically restart the container if it stops
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

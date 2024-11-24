@@ -1,26 +1,36 @@
-import WebSocket, { WebSocketServer } from 'ws';
+import express from 'express';
+import bodyParser from 'body-parser';
 import queryOllama from './llama.js'; // Import the query function
+import cors from 'cors';
 
-const wss = new WebSocketServer({ port: 8080 });
+const app = express();
+const port = 3000;
 
-console.log('WebSocket server running on ws://localhost:8080');
+// Middleware to parse JSON request bodies
+app.use(bodyParser.json());
+app.use(cors());
 
-wss.on('connection', (ws) => {
-    console.log('New client connected');
+console.log(`HTTP REST API server running on http://0.0.0.0:${port}`);
 
-    ws.on('message', async (message) => {
-        console.log(`Received message: ${message}`);
+// Endpoint to handle requests
+app.post('/query', async (req, res) => {
+    const { personOne, personTwo, messageHistory } = req.body;
 
-        try {
-            const response = await queryOllama(message.toString());
-            ws.send(response); // Send response back to the client
-        } catch (error) {
-            console.error('Error:', error.message);
-            ws.send('Error: Unable to process your request');
-        }
-    });
+    if (!personOne | !personTwo | !messageHistory ) {
+        return res.status(400).json({ error: 'Missing parameters' });
+    }
 
-    ws.on('close', () => {
-        console.log('Client disconnected');
-    });
+    try {
+        const response = await queryOllama(personOne, personTwo, messageHistory); // Query the model
+        console.log('Sent response');
+        res.json({ response }); // Respond to the client with the result
+    } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({ error: 'Unable to process your request' });
+    }
+});
+
+// Start the server
+app.listen(port, 'localhost', () => {
+    console.log(`Server is listening on http://0.0.0.0:${port}`);
 });
