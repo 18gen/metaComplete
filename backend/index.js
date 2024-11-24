@@ -4,7 +4,7 @@ import queryOllama from './llama.js'; // Import the query function
 import cors from 'cors';
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
