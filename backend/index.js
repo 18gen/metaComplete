@@ -306,12 +306,55 @@ app.post('/suggestions', async (req, res) => {
 
 
 
+// Helper function to generate interesting topics for discussion
+function generateInterestingReply(personOne, personTwo, messageHistory) {
+    const lastMessage = messageHistory[messageHistory.length - 1];
+    const personSpeaking = lastMessage.role === personOne.name ? personOne : personTwo;
+    const personListening = lastMessage.role === personOne.name ? personTwo : personOne;
 
+    const topics = [
+        `If you could solve one problem in ${personListening.interests.split(',')[0]}, what would it be?`,
+        `I wonder how your work in ${personListening.job} aligns with futuristic ideas like ${personSpeaking.interests.split(',')[1]}.`,
+        `What’s one unconventional idea you’ve always wanted to explore in ${personListening.job}?`,
+        `If you could collaborate on ${personSpeaking.interests.split(',')[0]} together, what would your first step be?`,
+        `Let’s think big! How could ${personSpeaking.personality.summary.toLowerCase()} and ${personListening.personality.summary.toLowerCase()} combine for an innovative project?`
+    ];
 
+    // Ensure replies are varied and interesting
+    const randomTopic = topics[Math.floor(Math.random() * topics.length)];
 
+    return {
+        response: randomTopic,
+        context: {
+            generatedFor: personListening.name,
+            lastMessageContent: lastMessage.content
+        }
+    };
+}
 
+// Endpoint to generate a reply to keep the conversation fun and engaging
+app.post('/topic', async (req, res) => {
+    const { personOne, personTwo, messageHistory } = req.body;
 
+    if (!personOne || !personTwo || !messageHistory) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+    }
 
+    try {
+        const reply = generateInterestingReply(personOne, personTwo, messageHistory);
+
+        res.json({
+            topicReply: reply.response,
+            metadata: reply.context
+        });
+    } catch (error) {
+        console.error('Error generating topic:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate topic reply', 
+            details: error.message 
+        });
+    }
+});
 
 
 
