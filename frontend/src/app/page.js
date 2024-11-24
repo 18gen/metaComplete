@@ -1,5 +1,6 @@
 "use client";
 import Sidebar from "./components/Sidebar";
+import { useAppContext } from "../context/AppContext"; 
 
 export default function Home() {
   return (
@@ -41,11 +42,10 @@ const stories = [
   { user_name: "Danny", image: "/member/danny.jpg" },
   { user_name: "Gen", image: "/member/gen.jpg" },
   { user_name: "James", image: "/member/james_2.jpeg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" }
+  { user_name: "Albert", image: "/pfp/albert_einstein.png" },
+  { user_name: "Marie", image: "/pfp/marie_curie.png" },
+  { user_name: "Oprah", image: "/pfp/oprah_winfrey.png" },
+  { user_name: "Serena", image: "/pfp/serena_williams.png" },
 ];
 
 const posts = [
@@ -64,10 +64,10 @@ const posts = [
 ];
 
 const suggestions = [
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" }
+  { user_name: "Ada", image: "/pfp/ada_lovelace.png" },
+  { user_name: "Frida", image: "/pfp/frida_kahlo.png" },
+  { user_name: "Leonardo", image: "/pfp/leonardo_da_vinci.png" },
+  { user_name: "Stephen", image: "/pfp/stephen_hawking.png" }
 ]
 
 // MainContent Component
@@ -129,6 +129,7 @@ const MainContent = () => {
 
 // RightSide Component
 const RightSide = () => {
+  const { userData } = useAppContext();
   return (
     <div>
       {/* Profile Section */}
@@ -139,8 +140,8 @@ const RightSide = () => {
           className="w-16 h-16 rounded-full"
         />
         <div className="ml-4">
-          <p className="font-medium text-gray-800">dan1_the2_man3</p>
-          <p className="text-sm text-gray-500">Danny</p>
+          <p className="font-medium text-gray-800">meta_connect</p>
+          <p className="text-sm text-gray-500">{userData.name}</p>
         </div>
         <button className="ml-auto text-blue-500 text-sm font-semibold">Switch</button>
       </div>
