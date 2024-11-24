@@ -312,7 +312,7 @@ const ProfilePage = () => {
 
       {/* Notification Pop-Up */}
       {showNotification && (
-        <div className="fixed w-full bottom-0 bg-gray-900 text-white px-4 py-2 rounded-md shadow-lg animate-slide-in">
+        <div className="fixed w-full bottom-0 bg-gray-900 text-white px-4 py-4 rounded-t-md shadow-lg animate-slide-in">
           Profile saved successfully!
         </div>
       )}

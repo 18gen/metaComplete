@@ -1,5 +1,6 @@
 "use client";
 import Sidebar from "./components/Sidebar";
+import { useAppContext } from "../context/AppContext"; 
 
 export default function Home() {
   return (
@@ -41,14 +42,19 @@ const stories = [
   { user_name: "Danny", image: "/member/danny.jpg" },
   { user_name: "Gen", image: "/member/gen.jpg" },
   { user_name: "James", image: "/member/james_2.jpeg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" }
+  { user_name: "Albert", image: "/pfp/albert_einstein.png" },
+  { user_name: "Marie", image: "/pfp/marie_curie.png" },
+  { user_name: "Oprah", image: "/pfp/oprah_winfrey.png" },
+  { user_name: "Serena", image: "/pfp/serena_williams.png" },
 ];
 
 const posts = [
+  {
+    user_name: "Gen",
+    avatar: "/member/gen.jpg",
+    image: "/post/slide1.webp",
+    caption: "",
+  },
   {
     user_name: "Gen",
     avatar: "/member/gen.jpg",
@@ -64,10 +70,10 @@ const posts = [
 ];
 
 const suggestions = [
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" },
-  { user_name: "cat", image: "/instagramPage/userLogo.jpg" }
+  { user_name: "Ada", image: "/pfp/ada_lovelace.png" },
+  { user_name: "Frida", image: "/pfp/frida_kahlo.png" },
+  { user_name: "Leonardo", image: "/pfp/leonardo_da_vinci.png" },
+  { user_name: "Stephen", image: "/pfp/stephen_hawking.png" }
 ]
 
 // MainContent Component
@@ -129,6 +135,7 @@ const MainContent = () => {
 
 // RightSide Component
 const RightSide = () => {
+  const { userData } = useAppContext();
   return (
     <div>
       {/* Profile Section */}
@@ -139,8 +146,8 @@ const RightSide = () => {
           className="w-16 h-16 rounded-full"
         />
         <div className="ml-4">
-          <p className="font-medium text-gray-800">dan1_the2_man3</p>
-          <p className="text-sm text-gray-500">Danny</p>
+          <p className="font-medium text-gray-800">meta_connect</p>
+          <p className="text-sm text-gray-500">{userData.name}</p>
         </div>
         <button className="ml-auto text-blue-500 text-sm font-semibold">Switch</button>
       </div>
@@ -179,17 +186,17 @@ const RightSide = () => {
 // Post Component with Fixed Dimensions
 const Post = ({ username, avatar, image, caption }) => {
   return (
-    <div className="bg-white shadow-md rounded-md overflow-hidden w-full max-w-[500px] mx-auto">
+    <div className="bg-white shadow-md rounded-md overflow-hidden max-w-[600px] mx-auto">
       {/* Header */}
       <div className="flex items-center p-2">
         {/* Avatar with Gradient Ring */}
         <div className="relative w-10 h-10">
           <div className="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-[2px] rounded-full">
-            <div className="bg-white rounded-full w-full h-full p-[2px]">
+            <div className="bg-white rounded-full w-full p-[2px]">
               <img
                 src={avatar}
                 alt={`${username}'s avatar`}
-                className="w-full h-full object-cover rounded-full"
+                className="w-full object-cover rounded-full"
               />
             </div>
           </div>
@@ -199,7 +206,7 @@ const Post = ({ username, avatar, image, caption }) => {
       </div>
 
       {/* Image with Fixed Dimensions */}
-      <div className="w-full h-[600px] overflow-hidden">
+      <div className="w-full h-full overflow-hidden">
         <img src={image} alt="Post" className="w-full h-full object-cover" />
       </div>
 
