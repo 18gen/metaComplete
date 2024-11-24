@@ -207,6 +207,8 @@ export function AppContextProvider({ children }) {
     [], 
     []
   ]);
+  const [read, setRead] = useState(Array(bots.length).fill(0)); // Initialize read count
+  const [compatibilityScores, setCompatibilityScores] = useState(new Array(8).fill(0));
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -224,6 +226,10 @@ export function AppContextProvider({ children }) {
     setBots,
     chatData,
     setChatData,
+    read,
+    setRead,
+    compatibilityScores,
+    setCompatibilityScores
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
