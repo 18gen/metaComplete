@@ -10,11 +10,17 @@ export async function genFullConvo(botId, botData, chatData, setChatData, userDa
   
     let updatedChat = [...chatData]; // Copy the existing chat data
   
+    // Helper function for random delay
+    const randomDelay = () => {
+      const delay = Math.random() * 1000 + 1000; // 1 to 2 seconds
+      return new Promise((resolve) => setTimeout(resolve, delay));
+    };
+  
     for (let i = updatedChat.length; i < messageLimit; i++) {
       // Determine whose turn it is: alternate between the user and the bot
       const currentSpeaker = i % 2 === 0 ? botData : userData; // The one receiving the message
       const otherSpeaker = i % 2 === 0 ? userData : botData; // Alternate between userData and botData
-      
+  
       // Construct the payload for the current speaker
       const payload = {
         personOne: {
@@ -50,6 +56,9 @@ export async function genFullConvo(botId, botData, chatData, setChatData, userDa
       console.log(`[${new Date().toISOString()}] Payload for API (Speaker: ${currentSpeaker.name}):`, payload);
   
       try {
+        // Add random delay before making the request
+        await randomDelay();
+  
         // Make HTTP POST request to the API
         const response = await fetch(apiEndpoint, {
           method: "POST",
