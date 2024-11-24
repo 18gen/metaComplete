@@ -52,6 +52,12 @@ const posts = [
   {
     user_name: "Gen",
     avatar: "/member/gen.jpg",
+    image: "/post/logo.PNG",
+    caption: "",
+  },
+  {
+    user_name: "Gen",
+    avatar: "/member/gen.jpg",
     image: "/post/slide1.webp",
     caption: "",
   },
