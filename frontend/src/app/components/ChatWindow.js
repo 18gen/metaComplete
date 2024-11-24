@@ -35,7 +35,7 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
 
   return (
     <div className="w-2/3 flex flex-col h-full">
-      <button
+      {/* <button
         onClick={handleConversation}
         style={{
           padding: '10px 20px',
@@ -49,7 +49,7 @@ const ChatWindow = ({ selectedContactId, onSendMessage }) => {
         disabled={loading}
       >
         Talk
-      </button>
+      </button> */}
 
       {/* Messages Section */}
       <div className="flex-grow overflow-y-auto p-4 bg-white">
