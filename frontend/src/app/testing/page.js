@@ -5,7 +5,7 @@ import { useAppContext } from "../../context/AppContext";
 
 export default function Page() {
   // Load context data
-  const { bots, chatData, setChatData, userData } = useAppContext();
+  const { bots, chatData, setChatData, userData, compatibilityScores, setCompatibilityScores, read, setRead  } = useAppContext(); // Access bots, chat data, and user data from context
   const [loading, setLoading] = useState(false); // Loading state
   const [botId, setBotId] = useState(0); // Default bot ID
 
@@ -23,8 +23,10 @@ export default function Page() {
         bots[botId], // Pass specific bot's data
         chatData[botId], // Pass specific bot's chat history
         setChatData,
-        userData // Pass user data
-      );
+        userData, // Pass user data
+        setCompatibilityScores, // Pass setCompatibilityScores
+        compatibilityScores // Pass compatibilityScores
+      );      
     } catch (error) {
       console.error("Error generating conversation:", error);
     } finally {
