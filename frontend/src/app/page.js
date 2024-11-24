@@ -52,6 +52,12 @@ const posts = [
   {
     user_name: "Gen",
     avatar: "/member/gen.jpg",
+    image: "/post/slide1.webp",
+    caption: "",
+  },
+  {
+    user_name: "Gen",
+    avatar: "/member/gen.jpg",
     image: "/post/allnighter.jpg",
     caption: "all nighters!! #MetaLlamaHacks #SheratonHotel",
   },
@@ -180,17 +186,17 @@ const RightSide = () => {
 // Post Component with Fixed Dimensions
 const Post = ({ username, avatar, image, caption }) => {
   return (
-    <div className="bg-white shadow-md rounded-md overflow-hidden w-full max-w-[500px] mx-auto">
+    <div className="bg-white shadow-md rounded-md overflow-hidden max-w-[600px] mx-auto">
       {/* Header */}
       <div className="flex items-center p-2">
         {/* Avatar with Gradient Ring */}
         <div className="relative w-10 h-10">
           <div className="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 p-[2px] rounded-full">
-            <div className="bg-white rounded-full w-full h-full p-[2px]">
+            <div className="bg-white rounded-full w-full p-[2px]">
               <img
                 src={avatar}
                 alt={`${username}'s avatar`}
-                className="w-full h-full object-cover rounded-full"
+                className="w-full object-cover rounded-full"
               />
             </div>
           </div>
@@ -200,7 +206,7 @@ const Post = ({ username, avatar, image, caption }) => {
       </div>
 
       {/* Image with Fixed Dimensions */}
-      <div className="w-full h-[600px] overflow-hidden">
+      <div className="w-full h-full overflow-hidden">
         <img src={image} alt="Post" className="w-full h-full object-cover" />
       </div>
 
